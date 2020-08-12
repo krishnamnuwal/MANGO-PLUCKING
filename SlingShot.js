@@ -4,8 +4,7 @@ class SlingShot{
             bodyA: bodyA,
             pointB: pointB,
             stiffness: 0.04,
-            length: 1
-            
+            length: 10            
         }
       //  this.sling1 = loadImage('sling1.png');
       //  this.sling2 = loadImage('sling2.png');
@@ -50,5 +49,6 @@ class SlingShot{
             pop();
         }
     }
+    
     
 }

@@ -4,9 +4,12 @@ const Constraint=Matter.Constraint;
 const Engine=Matter.Engine;
 const World=Matter.World;
 
-var backImg,tree,boy,mango,chain,stone;
+var backImg,tree,boy,mango,chain,stone,restart,restartImg;
+var gameState="onHand";
+
 function preload(){
 backImg=loadImage("garden1.jpg");
+restartImg=loadImage("restart.png")
 
 }
 
@@ -30,13 +33,16 @@ function setup(){
     mango11=new Mango(1400,380,80,80);
     mango12=new Mango(1450,300,60,60);
     mango13= new Mango(1010,280,90,90);
-    stone=new Stone(200,560);
+    stone=new Stone(250,580);
     chain= new SlingShot(stone.body,{x:250,y:580});
+   
 
    // sling= new Sling()
   //  console.log(mango.depth);
 
-
+    restart=createSprite(100,100,15,15);
+    restart.addAnimation("res",restartImg);
+    restart.scale=0.4;
 
 
 
@@ -50,6 +56,7 @@ function draw(){
 
     background(backImg)
     Engine.update(engine);
+    drawSprites();
    
    
     boy.display();
@@ -69,13 +76,33 @@ function draw(){
       mango13.display();
       stone.display();
       chain.display();
-      console.log(stone.body.position)
+      console.log(gameState)
+      textFont("Arial Black");
+    textSize(25);
+    fill("red");
+    text("CLICK ON RESTART BUTTON TO GET A CHANCE",130,200)
+    if(mousePressedOver(restart)){
+      Matter.Body.setPosition(stone.body,{x:250,y:580});
+      gameState="onHand";
+   //   Matter.Body.setStatic(stone.body,true);
+
+    
+      chain.attach(stone.body);
+    //  gameState="onhand"
+    }
+     
+      
+      
 }
-function mouseDragged(){
-  Matter.Body.setPosition(stone.body,{x:mouseX,y:mouseY});
-  Matter.Body.setStatic(stone.body,false)
-}
+
 function mouseReleased(){
   chain.fly();
+  gameState="launched"
   Matter.Body.setStatic(stone.body,false);
+}
+function mouseDragged(){
+  if(gameState!=="launched"){
+  Matter.Body.setPosition(stone.body,{x:mouseX,y:mouseY});
+  Matter.Body.setStatic(stone.body,false)
+  }
 }
